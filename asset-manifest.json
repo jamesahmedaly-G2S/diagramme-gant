@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/diagramme-gant/static/css/main.2da188e3.css",
+    "main.js": "/diagramme-gant/static/js/main.1a4741b4.js",
+    "static/js/453.35bef611.chunk.js": "/diagramme-gant/static/js/453.35bef611.chunk.js",
+    "index.html": "/diagramme-gant/index.html",
+    "main.2da188e3.css.map": "/diagramme-gant/static/css/main.2da188e3.css.map",
+    "main.1a4741b4.js.map": "/diagramme-gant/static/js/main.1a4741b4.js.map",
+    "453.35bef611.chunk.js.map": "/diagramme-gant/static/js/453.35bef611.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2da188e3.css",
+    "static/js/main.1a4741b4.js"
+  ]
+}
