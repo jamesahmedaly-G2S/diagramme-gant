@@ -1,19 +1,6 @@
 import React, { useMemo, useState } from "react";
 
-type Dev = "A" | "B";
-type Prio = "P0" | "P1" | "P2";
-
-interface Task {
-  id: string;
-  dev: Dev;
-  start: string;
-  end: string;
-  prio: Prio;
-  area: string;
-  title: string;
-}
-
-const TASKS: Task[] = [
+const TASKS = [
   // Dev A — Back
   { id: "BE-01", dev: "A", start: "2026-09-01", end: "2026-09-02", prio: "P0", area: "security", title: "Configuration CORS + permissions DRF" },
   { id: "BE-05", dev: "A", start: "2026-09-01", end: "2026-09-01", prio: "P2", area: "admin", title: "Organisation dashboard Django par catégorie" },
@@ -54,11 +41,42 @@ const TASKS: Task[] = [
   { id: "FE-18", dev: "B", start: "2026-10-14", end: "2026-10-15", prio: "P2", area: "vue-client", title: "Vue client — Responsable paie" },
   { id: "FE-19", dev: "B", start: "2026-10-16", end: "2026-10-16", prio: "P2", area: "vue-client", title: "Vue client — CDG Social" },
   { id: "FE-20", dev: "B", start: "2026-10-16", end: "2026-10-16", prio: "P2", area: "vue-client", title: "Sélecteur de profil Vue client" },
+
+  // 📄 Documentation technique — Dev A (Back) — jalons répartis tout au long du dev
+  { id: "DOC-A1", dev: "A", start: "2026-09-03", end: "2026-09-03", prio: "P2", area: "doc", title: "Doc — Architecture API & schéma DB (BE-01/02)" },
+  { id: "DOC-A2", dev: "A", start: "2026-09-18", end: "2026-09-18", prio: "P2", area: "doc", title: "Doc — Règles de calcul IJSS & anomalies (BE-06/07/08)" },
+  { id: "DOC-A3", dev: "A", start: "2026-10-13", end: "2026-10-13", prio: "P2", area: "doc", title: "Doc — Endpoints dashboard, courriers, relances (BE-09→14)" },
+  { id: "DOC-A4", dev: "A", start: "2026-10-16", end: "2026-10-16", prio: "P2", area: "doc", title: "Doc — Vue client & rôles (BE-04/17)" },
+
+  // 📄 Documentation technique — Dev B (Front) — jalons répartis tout au long du dev
+  { id: "DOC-B1", dev: "B", start: "2026-09-11", end: "2026-09-11", prio: "P2", area: "doc", title: "Doc — Design system & composants layout (FE-01/02/03)" },
+  { id: "DOC-B2", dev: "B", start: "2026-09-25", end: "2026-09-25", prio: "P2", area: "doc", title: "Doc — Auth, routing & calculateur (FE-08/13-16)" },
+  { id: "DOC-B3", dev: "B", start: "2026-10-08", end: "2026-10-08", prio: "P2", area: "doc", title: "Doc — Routes métier & drawer anomalie (FE-04→07/11/12)" },
+  { id: "DOC-B4", dev: "B", start: "2026-10-16", end: "2026-10-16", prio: "P2", area: "doc", title: "Doc — Vue client & sélecteur profil (FE-17→20)" },
+
+  // 🧪 Recettage à chaque intégration — tous les lundis, les 2 devs ensemble
+  { id: "REC-1", dev: "A", start: "2026-09-07", end: "2026-09-07", prio: "P1", area: "test", title: "Recettage S1 — Setup back + navbars front" },
+  { id: "REC-1B", dev: "B", start: "2026-09-07", end: "2026-09-07", prio: "P1", area: "test", title: "Recettage S1 — Setup back + navbars front" },
+  { id: "REC-2", dev: "A", start: "2026-09-14", end: "2026-09-14", prio: "P1", area: "test", title: "Recettage S2 — Auth JWT + 2FA + calculateur" },
+  { id: "REC-2B", dev: "B", start: "2026-09-14", end: "2026-09-14", prio: "P1", area: "test", title: "Recettage S2 — Auth JWT + 2FA + calculateur" },
+  { id: "REC-3", dev: "A", start: "2026-09-21", end: "2026-09-21", prio: "P1", area: "test", title: "Recettage S3 — Layout, routing, accueil" },
+  { id: "REC-3B", dev: "B", start: "2026-09-21", end: "2026-09-21", prio: "P1", area: "test", title: "Recettage S3 — Layout, routing, accueil" },
+  { id: "REC-4", dev: "A", start: "2026-09-28", end: "2026-09-28", prio: "P1", area: "test", title: "Recettage S4 — Calcul IJSS + anomalies + routes métier" },
+  { id: "REC-4B", dev: "B", start: "2026-09-28", end: "2026-09-28", prio: "P1", area: "test", title: "Recettage S4 — Calcul IJSS + anomalies + routes métier" },
+  { id: "REC-5", dev: "A", start: "2026-10-05", end: "2026-10-05", prio: "P1", area: "test", title: "Recettage S5 — Endpoints dashboard + courriers + drawer" },
+  { id: "REC-5B", dev: "B", start: "2026-10-05", end: "2026-10-05", prio: "P1", area: "test", title: "Recettage S5 — Endpoints dashboard + courriers + drawer" },
+  { id: "REC-6", dev: "A", start: "2026-10-12", end: "2026-10-12", prio: "P1", area: "test", title: "Recettage S6 — Documents, historique, relances, bandeau prescription" },
+  { id: "REC-6B", dev: "B", start: "2026-10-12", end: "2026-10-12", prio: "P1", area: "test", title: "Recettage S6 — Documents, historique, relances, bandeau prescription" },
+  { id: "REC-7", dev: "A", start: "2026-10-19", end: "2026-10-19", prio: "P0", area: "test", title: "Recettage S7 — Vue client (3 profils) + E2E global" },
+  { id: "REC-7B", dev: "B", start: "2026-10-19", end: "2026-10-19", prio: "P0", area: "test", title: "Recettage S7 — Vue client (3 profils) + E2E global" },
+  { id: "REC-8", dev: "A", start: "2026-10-26", end: "2026-10-29", prio: "P0", area: "test", title: "Recettage final — Correction bugs + validation GO/NO-GO" },
+  { id: "REC-8B", dev: "B", start: "2026-10-26", end: "2026-10-29", prio: "P0", area: "test", title: "Recettage final — Correction bugs + validation GO/NO-GO" },
 ];
 
-const PRIO_COLOR: Record<Prio, string> = { P0: "#ef4444", P1: "#f59e0b", P2: "#10b981" };
-const DEV_COLOR: Record<Dev, string> = { A: "#6366f1", B: "#0ea5e9" };
-const DEV_LABEL: Record<Dev, string> = { A: "Dev A (Back)", B: "Dev B (Front)" };
+const PRIO_COLOR: Record<string, string> = { P0: "#ef4444", P1: "#f59e0b", P2: "#10b981" };
+const DEV_COLOR: Record<string, string> = { A: "#6366f1", B: "#0ea5e9" };
+const DEV_LABEL: Record<string, string> = { A: "Dev A (Back)", B: "Dev B (Front)" };
+const AREA_BAR_COLOR: Record<string, string> = { doc: "#a855f7", test: "#f97316" };
 
 function parseDate(s: string): Date {
   const [y, m, d] = s.split("-").map(Number);
@@ -66,9 +84,9 @@ function parseDate(s: string): Date {
 }
 
 export default function App() {
-  const [filter, setFilter] = useState<"ALL" | Dev>("ALL");
+  const [filter, setFilter] = useState<"ALL" | "A" | "B">("ALL");
 
-  const { minDate, totalDays, days } = useMemo(() => {
+  const { minDate, maxDate, totalDays, days } = useMemo(() => {
     const starts = TASKS.map((t) => parseDate(t.start).getTime());
     const ends = TASKS.map((t) => parseDate(t.end).getTime());
     const min = new Date(Math.min(...starts));
@@ -96,6 +114,7 @@ export default function App() {
   const rowHeight = 34;
   const labelWidth = 300;
   const chartWidth = (totalDays + 1) * colWidth;
+  const today = new Date("2026-09-01");
 
   function dayIndex(dateStr: string): number {
     return Math.round((parseDate(dateStr).getTime() - minDate.getTime()) / 86400000);
@@ -107,7 +126,7 @@ export default function App() {
       <div className="px-5 py-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-lg font-semibold text-slate-800">Gantt — Cockpit Consultant G2S</h1>
-          <p className="text-xs text-slate-500 mt-0.5">01 sept. → 16 oct. 2026 · 37 issues · 2 développeurs · assistance IA</p>
+          <p className="text-xs text-slate-500 mt-0.5">01 sept. → 29 oct. 2026 · 37 issues + doc continue + test/recettage · 2 développeurs · assistance IA</p>
         </div>
         <div className="flex items-center gap-2">
           {(["ALL", "A", "B"] as const).map((f) => (
@@ -131,6 +150,8 @@ export default function App() {
         <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full" style={{ background: PRIO_COLOR.P0 }} /> P0 bloquant</span>
         <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full" style={{ background: PRIO_COLOR.P1 }} /> P1</span>
         <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full" style={{ background: PRIO_COLOR.P2 }} /> P2</span>
+        <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm" style={{ background: AREA_BAR_COLOR.doc }} /> 📄 Documentation technique</span>
+        <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm" style={{ background: AREA_BAR_COLOR.test }} /> 🧪 Test & recettage</span>
       </div>
 
       {/* Scroll container */}
@@ -176,6 +197,9 @@ export default function App() {
               const endIdx = dayIndex(t.end);
               const left = startIdx * colWidth;
               const width = (endIdx - startIdx + 1) * colWidth;
+              const barColor = AREA_BAR_COLOR[t.area] || DEV_COLOR[t.dev];
+              const isDoc = t.area === "doc";
+              const isTest = t.area === "test";
               return (
                 <div key={t.id} style={{ height: rowHeight }} className="relative border-b border-slate-100">
                   {/* weekend bg + grid */}
@@ -189,10 +213,10 @@ export default function App() {
                   {/* bar */}
                   <div
                     className="absolute top-1 bottom-1 rounded-md flex items-center px-1.5 shadow-sm cursor-pointer"
-                    style={{ left: left + 2, width: width - 4, background: `linear-gradient(90deg, ${DEV_COLOR[t.dev]}, ${DEV_COLOR[t.dev]}cc)`, borderLeft: `3px solid ${PRIO_COLOR[t.prio]}` }}
-                    title={`${t.id} (${DEV_LABEL[t.dev]}) — ${t.title}\n${t.start} → ${t.end}\nPriorité: ${t.prio}`}
+                    style={{ left: left + 2, width: width - 4, background: `linear-gradient(90deg, ${barColor}, ${barColor}cc)`, borderLeft: `3px solid ${PRIO_COLOR[t.prio]}`, opacity: isDoc ? 0.85 : 1 }}
+                    title={`${t.id} (${DEV_LABEL[t.dev]}) — ${t.title}\n${t.start} → ${t.end}\nPriorité: ${t.prio}${isDoc ? "\n📄 Documentation technique" : ""}${isTest ? "\n🧪 Test & recettage" : ""}`}
                   >
-                    <span className="text-[9px] text-white font-medium truncate">{t.id}</span>
+                    <span className="text-[9px] text-white font-medium truncate">{isDoc ? "📄" : isTest ? "🧪" : t.id}</span>
                     <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full border-2 border-white" style={{ background: PRIO_COLOR[t.prio] }} />
                   </div>
                 </div>
@@ -210,6 +234,8 @@ export default function App() {
         <span>🟢 P2: {visible.filter((t) => t.prio === "P2").length}</span>
         <span>🔵 Dev A: {visible.filter((t) => t.dev === "A").length}</span>
         <span>🟦 Dev B: {visible.filter((t) => t.dev === "B").length}</span>
+        <span>📄 Doc: {visible.filter((t) => t.area === "doc").length}</span>
+        <span>🧪 Test: {visible.filter((t) => t.area === "test").length}</span>
         <span className="text-slate-400">Survole une barre pour le détail · weekends grisés</span>
       </div>
     </div>
